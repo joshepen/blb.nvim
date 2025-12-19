@@ -2,6 +2,7 @@ local M = {}
 
 M.config = {}
 M.config.translation = "NIV"
+M.config.look_for_translation = true
 
 function M._get_user_selection()
 	local buf = 0
@@ -70,12 +71,15 @@ function M.setup()
 			return
 		end
 
-		local new_text, translation = M._get_end_translation(text)
-		if translation then
-			text = new_text
-		else
-			translation = M.config.translation
+		local translation = M.config.translation
+		if M.config.look_for_translation then
+			local new_text, new_translation = M._get_end_translation(text)
+			if new_translation then
+				text = new_text
+				translation = new_translation
+			end
 		end
+
 		M._open_blb(text, translation)
 	end, {})
 end
