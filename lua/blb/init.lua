@@ -47,14 +47,14 @@ function M._get_end_translation(text)
 	return string.sub(text, 1, last_word_index - 2), translation
 end
 
-function M_.url_encode(str)
+function M._url_encode(str)
 	return (str:gsub("([^%w%-_%.~])", function(c)
 		return string.format("%%%02X", string.byte(c))
 	end))
 end
 
 function M._open_blb(term, translation)
-	local formatted_term = url_encode(term)
+	local formatted_term = M._url_encode(term)
 	local url = "https://www.blueletterbible.org/search/preSearch.cfm?Criteria="
 		.. formatted_term
 		.. "&t="
@@ -63,19 +63,19 @@ function M._open_blb(term, translation)
 end
 
 vim.api.nvim_create_user_command("BLB", function()
-	local text = _get_user_selection()
+	local text = M._get_user_selection()
 
 	if not text then
 		return
 	end
 
-	local new_text, translation = _get_end_translation(text)
+	local new_text, translation = M._get_end_translation(text)
 	if translation then
 		text = new_text
 	else
 		translation = M.config.translation
 	end
-	_open_blb(text, translation)
+	M._open_blb(text, translation)
 end, {})
 
 return M
