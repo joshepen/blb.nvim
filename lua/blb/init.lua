@@ -62,20 +62,22 @@ function M._open_blb(term, translation)
 	vim.fn.jobstart({ "xdg-open", url }, { detach = true })
 end
 
-vim.api.nvim_create_user_command("BLB", function()
-	local text = M._get_user_selection()
+function M.setup()
+	vim.api.nvim_create_user_command("BLB", function()
+		local text = M._get_user_selection()
 
-	if not text then
-		return
-	end
+		if not text then
+			return
+		end
 
-	local new_text, translation = M._get_end_translation(text)
-	if translation then
-		text = new_text
-	else
-		translation = M.config.translation
-	end
-	M._open_blb(text, translation)
-end, {})
+		local new_text, translation = M._get_end_translation(text)
+		if translation then
+			text = new_text
+		else
+			translation = M.config.translation
+		end
+		M._open_blb(text, translation)
+	end, {})
+end
 
 return M
